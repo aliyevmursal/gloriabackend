@@ -1,0 +1,149 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\MoonShine\Resources;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Discount;
+
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Tabs;
+use MoonShine\UI\Components\Tabs\Tab;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Date;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ComponentContract;
+
+/**
+ * @extends ModelResource<Discount>
+ */
+class DiscountResource extends ModelResource
+{
+    protected string $model = Discount::class;
+
+    protected string $title = 'Discounts';
+
+    protected string $column = 'name_en';
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function indexFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Name', 'name_en')->sortable(),
+            Select::make('Type', 'type')->sortable(),
+            Number::make('Value', 'value')->sortable(),
+            Date::make('Start Date', 'start_date')->format("d.m.Y")->sortable(),
+            Date::make('End Date', 'end_date')->format("d.m.Y H:i")->sortable(),
+            Switcher::make('Active', 'is_active')->sortable(),
+            Date::make('Created at', 'created_at')->format("d.m.Y")->sortable(),
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            Grid::make([
+                Column::make([
+                    Box::make([
+                        ID::make(),
+                        Tabs::make([
+                            Tab::make('EN', [
+                                Text::make('Name (EN)', 'name_en')->required(),
+                            ]),
+                            Tab::make('AZ', [
+                                Text::make('Name (AZ)', 'name_az')->required(),
+                            ]),
+                        ]),
+                    ])
+                ])->columnSpan(8),
+
+                Column::make([
+                    Box::make([
+                        Select::make('Type', 'type')
+                            ->options([
+                                'percentage' => 'Percentage (%)',
+                                'fixed' => 'Fixed Amount ($)'
+                            ])
+                            ->required(),
+                        Number::make('Value', 'value')
+                            ->required()
+                            ->min(0)
+                            ->step(0.01)
+                            ->hint('For percentage: 0-100, For fixed: amount in dollars'),
+                        Date::make('Start Date', 'start_date')->required(),
+                        Date::make('End Date', 'end_date')->required(),
+                        Switcher::make('Active', 'is_active')->default(true),
+                    ])
+                ])->columnSpan(4),
+            ]),
+
+            Box::make([
+                BelongsToMany::make('Categories', 'categories', resource: CategoryResource::class)
+                    ->searchable()
+                    ->required(),
+            ])
+        ];
+    }
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Name (EN)', 'name_en'),
+            Text::make('Name (AZ)', 'name_az'),
+            Select::make('Type', 'type'),
+            Number::make('Value', 'value'),
+            Date::make('Start Date', 'start_date')->format("d.m.Y H:i"),
+            Date::make('End Date', 'end_date')->format("d.m.Y H:i"),
+            BelongsToMany::make('Categories', 'categories', resource: CategoryResource::class),
+            Switcher::make('Active', 'is_active'),
+            Date::make('Created at', 'created_at')->format("d.m.Y"),
+        ];
+    }
+
+    /**
+     * @param Discount $item
+     *
+     * @return array<string, string[]|string>
+     * @see https://laravel.com/docs/validation#available-validation-rules
+     */
+    protected function rules(mixed $item): array
+    {
+        return [
+            'name_en' => ['required', 'string', 'max:255'],
+            'name_az' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'in:percentage,fixed'],
+            'value' => ['required', 'numeric', 'min:0'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after:start_date'],
+            'is_active' => ['required', 'boolean'],
+        ];
+    }
+
+    public function search(): array
+    {
+        return [
+            'id',
+            'name_en',
+            'name_az',
+        ];
+    }
+}
