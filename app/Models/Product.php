@@ -118,19 +118,19 @@ class Product extends Model
             ->withTimestamps();
     }
 
-    public function topNotes()
+    public function tops()
     {
-        return $this->belongsToMany(Note::class, 'product_top_notes');
+        return $this->belongsToMany(Note::class, 'product_top_notes', 'product_id', 'note_id');
     }
 
-    public function middleNotes()
+    public function middles()
     {
-        return $this->belongsToMany(Note::class, 'product_middle_notes');
+        return $this->belongsToMany(Note::class, 'product_middle_notes', 'product_id', 'note_id');
     }
 
-    public function baseNotes()
+    public function bases()
     {
-        return $this->belongsToMany(Note::class, 'product_base_notes');
+        return $this->belongsToMany(Note::class, 'product_base_notes', 'product_id', 'note_id');
     }
 
     public function getActiveDiscount()

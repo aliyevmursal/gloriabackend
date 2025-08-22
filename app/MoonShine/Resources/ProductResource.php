@@ -138,21 +138,21 @@ class ProductResource extends ModelResource
             Grid::make([
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Top Notes', 'topNotes', resource: NoteResource::class)
+                        BelongsToMany::make('Top Notes', 'tops', resource: NoteResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Middle Notes', 'middleNotes', resource: NoteResource::class)
+                        BelongsToMany::make('Middle Notes', 'middles', resource: NoteResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Base Notes', 'baseNotes', resource: NoteResource::class)
+                        BelongsToMany::make('Base Notes', 'bases', resource: NoteResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
