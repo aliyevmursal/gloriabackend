@@ -23,7 +23,7 @@ class ProductController extends Controller
 
         $query = Product::query()
             ->active()
-            ->with(['categories', 'colors', 'sizes']);
+            ->with(['categories', 'colors', 'sizes', 'tops', 'middles', 'bases']);
 
         // Category filtering by slugs
         if ($request->has('category_slugs') && !empty($request->category_slugs)) {
@@ -131,7 +131,7 @@ class ProductController extends Controller
             }
         }
 
-        $product = Product::with(['categories', 'colors', 'sizes'])
+        $product = Product::with(['categories', 'colors', 'sizes', 'tops', 'middles', 'bases'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
@@ -186,7 +186,7 @@ class ProductController extends Controller
         $categoryIds = $product->categories->pluck('id')->toArray();
 
         // Find similar products from the same categories, excluding the current product
-        $similarProducts = Product::with(['categories', 'colors', 'sizes'])
+        $similarProducts = Product::with(['categories', 'colors', 'sizes', 'tops', 'middles', 'bases'])
             ->where('is_active', true)
             ->where('id', '!=', $product->id)
             ->whereHas('categories', function ($query) use ($categoryIds) {
