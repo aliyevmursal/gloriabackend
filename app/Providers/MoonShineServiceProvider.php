@@ -30,7 +30,7 @@ use App\MoonShine\Resources\ContactPageResource;
 use App\MoonShine\Resources\AboutPageResource;
 use App\MoonShine\Resources\HomePageResource;
 use App\MoonShine\Resources\ProductPageResource;
-
+use App\MoonShine\Resources\NoteResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -66,6 +66,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 HomePageResource::class,
                 ProductPageResource::class,
                 TransactionResource::class,
+                NoteResource::class,
             ])
             ->pages([
                 ...$config->getPages(),
