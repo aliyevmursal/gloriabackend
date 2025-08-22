@@ -50,19 +50,6 @@ class ProductResource extends ModelResource
             ID::make()->sortable(),
             Image::make('Cover', 'cover'),
             Text::make('Name', 'name_en')->sortable(),
-            Text::make('Price Range', formatted: function ($item) {
-                $sizes = $item->sizes()->withPivot(['price', 'is_active'])->get();
-                if ($sizes->isEmpty()) {
-                    return 'No sizes';
-                }
-                $prices = $sizes->pluck('pivot.price')->filter();
-                if ($prices->isEmpty()) {
-                    return 'No prices';
-                }
-                $min = $prices->min();
-                $max = $prices->max();
-                return $min == $max ? "$" . number_format($min, 2) : "$" . number_format($min, 2) . " - $" . number_format($max, 2);
-            })->sortable(),
             Switcher::make('Active', 'is_active')->sortable(),
             Date::make('Created at', 'created_at')->format("d.m.Y")->sortable(),
         ];
