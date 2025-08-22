@@ -132,6 +132,15 @@ class ProductResource extends ModelResource
                             ]),
                     ])
                 ])->columnSpan(4),
+            ]),
+
+            Grid::make([
+                Column::make([
+                    Box::make([
+                        BelongsToMany::make('Notes', 'notes', resource: NoteResource::class)
+                            ->searchable(),
+                    ])
+                ])->columnSpan(12),
             ])
         ];
     }
@@ -172,6 +181,7 @@ class ProductResource extends ModelResource
                     Number::make('Price ($)', 'price'),
                     Switcher::make('Active', 'is_active'),
                 ]),
+            BelongsToMany::make('Notes', 'notes', resource: NoteResource::class),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];

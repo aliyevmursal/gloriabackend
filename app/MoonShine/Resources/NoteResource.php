@@ -6,7 +6,9 @@ namespace App\MoonShine\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Note;
+use App\Models\Product;
 
+use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Column;
@@ -69,7 +71,14 @@ class NoteResource extends ModelResource
                         ]),
                         Switcher::make('Active', 'is_active')->default(true),
                     ])
-                ])->columnSpan(12),
+                ])->columnSpan(8),
+
+                Column::make([
+                    Box::make([
+                        BelongsToMany::make('Products', 'products', resource: ProductResource::class)
+                            ->searchable(),
+                    ])
+                ])->columnSpan(4),
             ])
         ];
     }
@@ -84,6 +93,7 @@ class NoteResource extends ModelResource
             Text::make('Title (EN)', 'title_en'),
             Text::make('Title (AZ)', 'title_az'),
             Text::make('Title (RU)', 'title_ru'),
+            BelongsToMany::make('Products', 'products', resource: ProductResource::class),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
             Date::make('Updated at', 'updated_at')->format("d.m.Y"),

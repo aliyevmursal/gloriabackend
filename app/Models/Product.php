@@ -118,6 +118,11 @@ class Product extends Model
             ->withTimestamps();
     }
 
+    public function notes()
+    {
+        return $this->belongsToMany(Note::class, 'note_products');
+    }
+
     public function getActiveDiscount()
     {
         $categoryIds = $this->categories()->pluck('categories.id');
