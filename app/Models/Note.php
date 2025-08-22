@@ -35,8 +35,18 @@ class Note extends Model
         return $query->where('is_active', true);
     }
 
-    public function products()
+    public function topProducts()
     {
-        return $this->belongsToMany(Product::class, 'note_products');
+        return $this->belongsToMany(Product::class, 'product_top_notes');
+    }
+
+    public function middleProducts()
+    {
+        return $this->belongsToMany(Product::class, 'product_middle_notes');
+    }
+
+    public function baseProducts()
+    {
+        return $this->belongsToMany(Product::class, 'product_base_notes');
     }
 }

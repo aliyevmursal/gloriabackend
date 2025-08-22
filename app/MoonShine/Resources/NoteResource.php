@@ -75,7 +75,11 @@ class NoteResource extends ModelResource
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Products', 'products', resource: ProductResource::class)
+                        BelongsToMany::make('Top Products', 'topProducts', resource: ProductResource::class)
+                            ->searchable(),
+                        BelongsToMany::make('Middle Products', 'middleProducts', resource: ProductResource::class)
+                            ->searchable(),
+                        BelongsToMany::make('Base Products', 'baseProducts', resource: ProductResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
@@ -93,7 +97,9 @@ class NoteResource extends ModelResource
             Text::make('Title (EN)', 'title_en'),
             Text::make('Title (AZ)', 'title_az'),
             Text::make('Title (RU)', 'title_ru'),
-            BelongsToMany::make('Products', 'products', resource: ProductResource::class),
+            BelongsToMany::make('Top Products', 'topProducts', resource: ProductResource::class),
+            BelongsToMany::make('Middle Products', 'middleProducts', resource: ProductResource::class),
+            BelongsToMany::make('Base Products', 'baseProducts', resource: ProductResource::class),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
             Date::make('Updated at', 'updated_at')->format("d.m.Y"),
