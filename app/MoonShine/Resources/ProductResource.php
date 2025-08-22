@@ -10,7 +10,10 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\Note;
+use App\MoonShine\Resources\CategoryResource;
+use App\MoonShine\Resources\ColorResource;
 use App\MoonShine\Resources\NoteResource;
+use App\MoonShine\Resources\SizeResource;
 
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
 use MoonShine\Laravel\Fields\Slug;
