@@ -29,7 +29,7 @@ use App\MoonShine\Resources\ContactPageResource;
 use App\MoonShine\Resources\AboutPageResource;
 use App\MoonShine\Resources\HomePageResource;
 use App\MoonShine\Resources\ProductPageResource;
-
+use App\MoonShine\Resources\NoteResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -59,6 +59,7 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make('Sizes', SizeResource::class),
                 MenuItem::make('Products', ProductResource::class),
                 MenuItem::make('Discounts', DiscountResource::class),
+                MenuItem::make('Notes', NoteResource::class),
             ])->icon('building-storefront'),
 
             MenuGroup::make('Order', [
