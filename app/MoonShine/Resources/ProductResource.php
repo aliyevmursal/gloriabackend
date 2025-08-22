@@ -139,21 +139,21 @@ class ProductResource extends ModelResource
                 Column::make([
                     Box::make([
                         BelongsToMany::make('Top Notes', 'tops', resource: NoteResource::class)
-                            ->searchable(),
+                        ->asyncSearch(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
                         BelongsToMany::make('Middle Notes', 'middles', resource: NoteResource::class)
-                            ->searchable(),
+                        ->asyncSearch(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
                         BelongsToMany::make('Base Notes', 'bases', resource: NoteResource::class)
-                            ->searchable(),
+                        ->asyncSearch(),
                     ])
                 ])->columnSpan(4),
             ])
