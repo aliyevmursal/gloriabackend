@@ -110,7 +110,7 @@ class ProductResource extends ModelResource
             Grid::make([
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Categories', 'categories', resource: 'category')
+                        BelongsToMany::make('Categories', 'categories', resource: CategoryResource::class)
                             ->searchable()
                             ->required(),
                     ])
@@ -118,14 +118,14 @@ class ProductResource extends ModelResource
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Colors', 'colors', resource: 'color')
+                        BelongsToMany::make('Colors', 'colors', resource: ColorResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Sizes', 'sizes', resource: 'size')
+                        BelongsToMany::make('Sizes', 'sizes', resource: SizeResource::class)
                             ->searchable()
                             ->fields([
                                 Number::make('Price ($)', 'price')->required()->min(0)->step(0.01),
@@ -138,21 +138,21 @@ class ProductResource extends ModelResource
             Grid::make([
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Top Notes', 'topNotes', resource: 'note')
+                        BelongsToMany::make('Top Notes', 'topNotes', resource: NoteResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Middle Notes', 'middleNotes', resource: 'note')
+                        BelongsToMany::make('Middle Notes', 'middleNotes', resource: NoteResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
 
                 Column::make([
                     Box::make([
-                        BelongsToMany::make('Base Notes', 'baseNotes', resource: 'note')
+                        BelongsToMany::make('Base Notes', 'baseNotes', resource: NoteResource::class)
                             ->searchable(),
                     ])
                 ])->columnSpan(4),
@@ -189,16 +189,16 @@ class ProductResource extends ModelResource
                 $max = $prices->max();
                 return $min == $max ? "$" . number_format($min, 2) : "$" . number_format($min, 2) . " - $" . number_format($max, 2);
             }),
-            BelongsToMany::make('Categories', 'categories', resource: 'category'),
-            BelongsToMany::make('Colors', 'colors', resource: 'color'),
-            BelongsToMany::make('Sizes with Prices', 'sizes', resource: 'size')
+            BelongsToMany::make('Categories', 'categories', resource: CategoryResource::class),
+            BelongsToMany::make('Colors', 'colors', resource: ColorResource::class),
+            BelongsToMany::make('Sizes with Prices', 'sizes', resource: SizeResource::class)
                 ->fields([
                     Number::make('Price ($)', 'price'),
                     Switcher::make('Active', 'is_active'),
                 ]),
-            BelongsToMany::make('Top Notes', 'topNotes', resource: 'note'),
-            BelongsToMany::make('Middle Notes', 'middleNotes', resource: 'note'),
-            BelongsToMany::make('Base Notes', 'baseNotes', resource: 'note'),
+            // BelongsToMany::make('Top Notes', 'topNotes', resource: 'note'),
+            // BelongsToMany::make('Middle Notes', 'middleNotes', resource: 'note'),
+            // BelongsToMany::make('Base Notes', 'baseNotes', resource: 'note'),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];
