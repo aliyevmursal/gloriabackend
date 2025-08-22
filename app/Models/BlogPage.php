@@ -9,18 +9,25 @@ class BlogPage extends Model
     protected $fillable = [
         'title_en',
         'title_az',
+        'title_ru',
         'description_en',
         'description_az',
+        'description_ru',
         'meta_title_en',
         'meta_title_az',
+        'meta_title_ru',
         'meta_description_en',
         'meta_description_az',
+        'meta_description_ru',
         'meta_keywords_en',
         'meta_keywords_az',
+        'meta_keywords_ru',
         'og_title_en',
         'og_title_az',
+        'og_title_ru',
         'og_description_en',
         'og_description_az',
+        'og_description_ru',
         'og_image',
         'is_active'
     ];
@@ -34,18 +41,25 @@ class BlogPage extends Model
     protected $hidden = [
         'title_en',
         'title_az',
+        'title_ru',
         'description_en',
         'description_az',
+        'description_ru',
         'meta_title_en',
         'meta_title_az',
+        'meta_title_ru',
         'meta_description_en',
         'meta_description_az',
+        'meta_description_ru',
         'meta_keywords_en',
         'meta_keywords_az',
+        'meta_keywords_ru',
         'og_title_en',
         'og_title_az',
+        'og_title_ru',
         'og_description_en',
         'og_description_az',
+        'og_description_ru',
         'created_at',
         'updated_at',
     ];
@@ -55,6 +69,7 @@ class BlogPage extends Model
         return [
             'az' => $this->title_az,
             'en' => $this->title_en,
+            'ru' => $this->title_ru,
         ];
     }
 
@@ -63,6 +78,7 @@ class BlogPage extends Model
         return [
             'az' => $this->description_az,
             'en' => $this->description_en,
+            'ru' => $this->description_ru,
         ];
     }
 
@@ -71,6 +87,7 @@ class BlogPage extends Model
         return [
             'az' => $this->meta_title_az,
             'en' => $this->meta_title_en,
+            'ru' => $this->meta_title_ru,
         ];
     }
 
@@ -79,6 +96,7 @@ class BlogPage extends Model
         return [
             'az' => $this->meta_description_az,
             'en' => $this->meta_description_en,
+            'ru' => $this->meta_description_ru,
         ];
     }
 
@@ -87,6 +105,7 @@ class BlogPage extends Model
         return [
             'az' => $this->meta_keywords_az,
             'en' => $this->meta_keywords_en,
+            'ru' => $this->meta_keywords_ru,
         ];
     }
 
@@ -95,6 +114,7 @@ class BlogPage extends Model
         return [
             'az' => $this->og_title_az,
             'en' => $this->og_title_en,
+            'ru' => $this->og_title_ru,
         ];
     }
 
@@ -103,6 +123,7 @@ class BlogPage extends Model
         return [
             'az' => $this->og_description_az,
             'en' => $this->og_description_en,
+            'ru' => $this->og_description_ru,
         ];
     }
 }

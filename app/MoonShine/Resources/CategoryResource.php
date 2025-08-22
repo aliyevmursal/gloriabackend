@@ -73,6 +73,9 @@ class CategoryResource extends ModelResource
                             Tab::make('AZ', [
                                 Text::make('Name', 'name_az')->required(),
                             ]),
+                            Tab::make('RU', [
+                                Text::make('Name', 'name_ru')->required(),
+                            ]),
                         ]),
                         Slug::make('Url', 'slug')
                             ->required()
@@ -101,6 +104,7 @@ class CategoryResource extends ModelResource
             ID::make(),
             Text::make('Name (EN)', 'name_en'),
             Text::make('Name (AZ)', 'name_az'),
+            Text::make('Name (RU)', 'name_ru'),
             Text::make('Url', 'slug', formatted: static fn(Model $model) => "/{$model->slug}"),
             Switcher::make('Active', 'is_active'),
             Number::make('Position', 'position'),
@@ -119,6 +123,7 @@ class CategoryResource extends ModelResource
         return [
             'name_en' => ['required', 'string', 'max:255'],
             'name_az' => ['required', 'string', 'max:255'],
+            'name_ru' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:categories,slug,' . $item->getKey()],
             'position' => ['required', 'numeric', 'min:0'],
             'is_active' => ['required', 'boolean'],

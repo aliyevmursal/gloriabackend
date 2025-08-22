@@ -9,6 +9,7 @@ class BlogCategory extends Model
     protected $fillable = [
         'name_az',
         'name_en',
+        'name_ru',
         'slug',
         'is_active',
     ];
@@ -19,13 +20,14 @@ class BlogCategory extends Model
 
     protected $appends = ['name'];
 
-    protected $hidden = ['name_az', 'name_en', 'is_active', 'created_at', 'updated_at'];
+    protected $hidden = ['name_az', 'name_en', 'name_ru', 'is_active', 'created_at', 'updated_at'];
 
     public function getNameAttribute()
     {
         return [
             'az' => $this->name_az,
             'en' => $this->name_en,
+            'ru' => $this->name_ru,
         ];
     }
 }

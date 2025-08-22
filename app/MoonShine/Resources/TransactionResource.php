@@ -56,30 +56,19 @@ class TransactionResource extends ModelResource
                 Column::make([
                     Box::make([
                         ID::make(),
-                        Text::make('Transaction PG ID', 'txpg_id')
-                            ->required(),
-                        Select::make('Status', 'status')
-                            ->options([
-                                'pending' => 'Pending',
-                                'success' => 'Success',
-                                'failed' => 'Failed',
-                                'cancelled' => 'Cancelled',
-                            ])
-                            ->required(),
-                        Text::make('CVV 2 Authentication Status', 'cvv_2_auth_status'),
+                        Text::make('Transaction PG ID', 'txpg_id')->required()->unique(),
+                        Textarea::make('Hosted Payment Page URL', 'hpp_url'),
+                        Text::make('Password', 'password'),
+                        Select::make('Status', 'status')->options([
+                            'pending' => 'Pending',
+                            'completed' => 'Completed',
+                            'failed' => 'Failed',
+                            'cancelled' => 'Cancelled'
+                        ])->default('pending')->required(),
+                        Textarea::make('Secret', 'secret'),
+                        Text::make('CVV 2 Auth Status', 'cvv_2_auth_status')->required(),
                     ])
                 ])->columnSpan(8),
-
-                Column::make([
-                    Box::make([
-                        Text::make('Password', 'password'),
-                        Text::make('Secret', 'secret'),
-                    ])
-                ])->columnSpan(4),
-            ]),
-
-            Box::make([
-                Text::make('HPP URL', 'hpp_url'),
             ])
         ];
     }
@@ -92,13 +81,17 @@ class TransactionResource extends ModelResource
         return [
             ID::make(),
             Text::make('Transaction PG ID', 'txpg_id'),
-            Text::make('Status', 'status'),
-            Text::make('HPP URL', 'hpp_url'),
+            Textarea::make('Hosted Payment Page URL', 'hpp_url'),
             Text::make('Password', 'password'),
-            Text::make('Secret', 'secret'),
-            Text::make('CVV 2 Authentication Status', 'cvv_2_auth_status'),
+            Select::make('Status', 'status')->options([
+                'pending' => 'Pending',
+                'completed' => 'Completed',
+                'failed' => 'Failed',
+                'cancelled' => 'Cancelled'
+            ]),
+            Textarea::make('Secret', 'secret'),
+            Text::make('CVV 2 Auth Status', 'cvv_2_auth_status'),
             Date::make('Created at', 'created_at')->format("d.m.Y H:i"),
-            Date::make('Updated at', 'updated_at')->format("d.m.Y H:i"),
         ];
     }
 
@@ -111,12 +104,12 @@ class TransactionResource extends ModelResource
     protected function rules(mixed $item): array
     {
         return [
-            'txpg_id' => ['required', 'string', 'max:255', 'unique:transactions,txpg_id,' . $item?->id],
-            'hpp_url' => ['nullable', 'string', 'max:1000'],
-            'password' => ['nullable', 'string', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
-            'secret' => ['nullable', 'string', 'max:1000'],
-            'cvv_2_auth_status' => ['nullable', 'string', 'max:255'],
+            'txpg_id' => ['required', 'string', 'unique:transactions,txpg_id,' . $item->getKey()],
+            'hpp_url' => ['nullable', 'string'],
+            'password' => ['nullable', 'string'],
+            'status' => ['required', 'string', 'in:pending,completed,failed,cancelled'],
+            'secret' => ['nullable', 'string'],
+            'cvv_2_auth_status' => ['required', 'string'],
         ];
     }
 

@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name_az');
             $table->string('name_en');
+            $table->string('name_ru');
             $table->string('code'); // Hex color code
             $table->boolean('is_active')->default(true);
             $table->timestamps();

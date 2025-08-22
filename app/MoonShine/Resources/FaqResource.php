@@ -59,20 +59,25 @@ class FaqResource extends ModelResource
                         ID::make(),
                         Tabs::make([
                             Tab::make('EN', [
-                                Text::make('Question (EN)', 'question_en')->required(),
+                                Text::make('Question (EN)', 'question_en')->reactive()->required(),
                                 Textarea::make('Answer (EN)', 'answer_en')->required(),
                             ]),
                             Tab::make('AZ', [
                                 Text::make('Question (AZ)', 'question_az')->required(),
                                 Textarea::make('Answer (AZ)', 'answer_az')->required(),
                             ]),
+                            Tab::make('RU', [
+                                Text::make('Question (RU)', 'question_ru')->required(),
+                                Textarea::make('Answer (RU)', 'answer_ru')->required(),
+                            ]),
                         ]),
                     ])
                 ])->columnSpan(8),
+
                 Column::make([
                     Box::make([
+                        Number::make('Position', 'position')->default(0)->min(0),
                         Switcher::make('Active', 'is_active')->default(true),
-                        Number::make('Position', 'position')->default(0)->min(0)->required(),
                     ])
                 ])->columnSpan(4),
             ])
@@ -88,10 +93,12 @@ class FaqResource extends ModelResource
             ID::make(),
             Text::make('Question (EN)', 'question_en'),
             Text::make('Question (AZ)', 'question_az'),
+            Text::make('Question (RU)', 'question_ru'),
             Textarea::make('Answer (EN)', 'answer_en'),
             Textarea::make('Answer (AZ)', 'answer_az'),
-            Switcher::make('Active', 'is_active'),
+            Textarea::make('Answer (RU)', 'answer_ru'),
             Number::make('Position', 'position'),
+            Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];
     }
@@ -107,10 +114,12 @@ class FaqResource extends ModelResource
         return [
             'question_en' => ['required', 'string', 'max:255'],
             'question_az' => ['required', 'string', 'max:255'],
+            'question_ru' => ['required', 'string', 'max:255'],
             'answer_en' => ['required', 'string'],
             'answer_az' => ['required', 'string'],
-            'position' => ['required', 'numeric', 'min:0'],
-            'is_active' => ['required', 'boolean'],
+            'answer_ru' => ['required', 'string'],
+            'position' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['boolean'],
         ];
     }
 

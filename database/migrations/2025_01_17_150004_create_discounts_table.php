@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name_az');
             $table->string('name_en');
+            $table->string('name_ru');
             $table->enum('type', ['percentage', 'fixed']); // percentage or fixed amount
             $table->decimal('value', 10, 2); // 0-100 for percentage, fixed amount for fixed
             $table->datetime('start_date');

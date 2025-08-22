@@ -13,8 +13,10 @@ class OrderItem extends Model
         'color_id',
         'product_name_az',
         'product_name_en',
+        'product_name_ru',
         'product_description_az',
         'product_description_en',
+        'product_description_ru',
         'product_cover',
         'product_price',
         'product_discounted_price',
@@ -61,6 +63,7 @@ class OrderItem extends Model
         return [
             'az' => $this->product_name_az,
             'en' => $this->product_name_en,
+            'ru' => $this->product_name_ru,
         ];
     }
 
@@ -69,6 +72,7 @@ class OrderItem extends Model
         return [
             'az' => $this->product_description_az,
             'en' => $this->product_description_en,
+            'ru' => $this->product_description_ru,
         ];
     }
 

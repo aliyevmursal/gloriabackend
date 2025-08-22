@@ -68,6 +68,9 @@ class DiscountResource extends ModelResource
                             Tab::make('AZ', [
                                 Text::make('Name (AZ)', 'name_az')->required(),
                             ]),
+                            Tab::make('RU', [
+                                Text::make('Name (RU)', 'name_ru')->required(),
+                            ]),
                         ]),
                     ])
                 ])->columnSpan(8),
@@ -109,6 +112,7 @@ class DiscountResource extends ModelResource
             ID::make(),
             Text::make('Name (EN)', 'name_en'),
             Text::make('Name (AZ)', 'name_az'),
+            Text::make('Name (RU)', 'name_ru'),
             Select::make('Type', 'type'),
             Number::make('Value', 'value'),
             Date::make('Start Date', 'start_date')->format("d.m.Y H:i"),
@@ -130,6 +134,7 @@ class DiscountResource extends ModelResource
         return [
             'name_en' => ['required', 'string', 'max:255'],
             'name_az' => ['required', 'string', 'max:255'],
+            'name_ru' => ['required', 'string', 'max:255'],
             'type' => ['required', 'in:percentage,fixed'],
             'value' => ['required', 'numeric', 'min:0'],
             'start_date' => ['required', 'date'],

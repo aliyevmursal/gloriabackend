@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title_az');
             $table->string('title_en');
+            $table->string('title_ru');
             $table->decimal('price', 10, 2);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

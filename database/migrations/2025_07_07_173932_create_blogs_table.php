@@ -16,8 +16,10 @@ return new class extends Migration {
             $table->foreignIdFor(BlogCategory::class)->constrained()->onDelete('cascade');
             $table->string('name_az');
             $table->string('name_en');
+            $table->string('name_ru');
             $table->text('description_az');
             $table->text('description_en');
+            $table->text('description_ru');
             $table->string('cover');
             $table->string('slug')->unique();
             $table->integer('view_count')->default(0);

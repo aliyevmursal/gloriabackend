@@ -16,8 +16,10 @@ return new class extends Migration {
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('product_name_az');
             $table->string('product_name_en');
+            $table->string('product_name_ru');
             $table->text('product_description_az');
             $table->text('product_description_en');
+            $table->text('product_description_ru');
             $table->string('product_cover');
             $table->decimal('product_price', 10, 2);
             $table->decimal('product_discounted_price', 10, 2)->nullable();

@@ -9,6 +9,7 @@ class DeliveryType extends Model
     protected $fillable = [
         'title_az',
         'title_en',
+        'title_ru',
         'price',
         'is_active',
     ];
@@ -20,13 +21,14 @@ class DeliveryType extends Model
 
     protected $appends = ['title'];
 
-    protected $hidden = ['title_az', 'title_en', 'is_active', 'created_at', 'updated_at'];
+    protected $hidden = ['title_az', 'title_en', 'title_ru', 'is_active', 'created_at', 'updated_at'];
 
     public function getTitleAttribute()
     {
         return [
             'az' => $this->title_az,
             'en' => $this->title_en,
+            'ru' => $this->title_ru,
         ];
     }
 

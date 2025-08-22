@@ -76,6 +76,10 @@ class ProductResource extends ModelResource
                                 Text::make('Name (AZ)', 'name_az'),
                                 Textarea::make('Description (AZ)', 'description_az'),
                             ]),
+                            Tab::make('RU', [
+                                Text::make('Name (RU)', 'name_ru'),
+                                Textarea::make('Description (RU)', 'description_ru'),
+                            ]),
                         ]),
                     ])
                 ])->columnSpan(8),
@@ -126,8 +130,10 @@ class ProductResource extends ModelResource
             ID::make(),
             Text::make('Name (EN)', 'name_en'),
             Text::make('Name (AZ)', 'name_az'),
+            Text::make('Name (RU)', 'name_ru'),
             Textarea::make('Description (EN)', 'description_en'),
             Textarea::make('Description (AZ)', 'description_az'),
+            Textarea::make('Description (RU)', 'description_ru'),
             Text::make('Url', 'slug', formatted: static fn(Model $model) => "/{$model->slug}"),
             Image::make('Cover', 'cover'),
             Image::make('Gallery', 'gallery')->multiple(),
@@ -153,8 +159,10 @@ class ProductResource extends ModelResource
         return [
             'name_en' => ['required', 'string', 'max:255'],
             'name_az' => ['required', 'string', 'max:255'],
+            'name_ru' => ['required', 'string', 'max:255'],
             'description_en' => ['required', 'string'],
             'description_az' => ['required', 'string'],
+            'description_ru' => ['required', 'string'],
             'slug' => ['required', 'string', 'max:255', 'unique:products,slug,' . $item->getKey()],
             'price' => ['required', 'numeric', 'min:0'],
             'cover' => $isCreating ? ['required', 'image', 'max:8192'] : ['nullable', 'image', 'max:8192'],

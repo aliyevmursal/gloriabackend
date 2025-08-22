@@ -9,10 +9,13 @@ class Banner extends Model
     protected $fillable = [
         'title_az',
         'title_en',
+        'title_ru',
         'slogan_az',
         'slogan_en',
+        'slogan_ru',
         'helper_text_az',
         'helper_text_en',
+        'helper_text_ru',
         'cover',
         'link',
         'position',
@@ -25,7 +28,7 @@ class Banner extends Model
 
     protected $appends = ['cover_url', 'title', 'slogan', 'helper_text'];
 
-    protected $hidden = ['cover', 'title_az', 'title_en', 'position', 'is_active', 'created_at', 'updated_at', 'slogan_az', 'slogan_en', 'helper_text_az', 'helper_text_en'];
+    protected $hidden = ['cover', 'title_az', 'title_en', 'title_ru', 'position', 'is_active', 'created_at', 'updated_at', 'slogan_az', 'slogan_en', 'slogan_ru', 'helper_text_az', 'helper_text_en', 'helper_text_ru'];
 
     public function getCoverUrlAttribute()
     {
@@ -37,6 +40,7 @@ class Banner extends Model
         return [
             'az' => $this->title_az,
             'en' => $this->title_en,
+            'ru' => $this->title_ru,
         ];
     }
 
@@ -45,6 +49,7 @@ class Banner extends Model
         return [
             'az' => $this->slogan_az,
             'en' => $this->slogan_en,
+            'ru' => $this->slogan_ru,
         ];
     }
 
@@ -53,6 +58,7 @@ class Banner extends Model
         return [
             'az' => $this->helper_text_az,
             'en' => $this->helper_text_en,
+            'ru' => $this->helper_text_ru,
         ];
     }
 }

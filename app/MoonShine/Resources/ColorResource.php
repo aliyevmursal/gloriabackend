@@ -64,20 +64,19 @@ class ColorResource extends ModelResource
                         ID::make(),
                         Tabs::make([
                             Tab::make('EN', [
-                                Text::make('Name (EN)', 'name_en')->required(),
+                                Text::make('Name (EN)', 'name_en')->reactive()->required(),
                             ]),
                             Tab::make('AZ', [
                                 Text::make('Name (AZ)', 'name_az')->required(),
                             ]),
+                            Tab::make('RU', [
+                                Text::make('Name (RU)', 'name_ru')->required(),
+                            ]),
                         ]),
-                    ])
-                ])->columnSpan(8),
-                Column::make([
-                    Box::make([
-                        ColorField::make('Color Code', 'code')->required(),
+                        Text::make('Color Code', 'code')->required()->hint('Hex color code (e.g., #FF0000)'),
                         Switcher::make('Active', 'is_active')->default(true),
                     ])
-                ])->columnSpan(4),
+                ])->columnSpan(8),
             ])
         ];
     }
@@ -91,7 +90,8 @@ class ColorResource extends ModelResource
             ID::make(),
             Text::make('Name (EN)', 'name_en'),
             Text::make('Name (AZ)', 'name_az'),
-            ColorField::make('Color Code', 'code'),
+            Text::make('Name (RU)', 'name_ru'),
+            Text::make('Color Code', 'code'),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];
@@ -108,7 +108,8 @@ class ColorResource extends ModelResource
         return [
             'name_en' => ['required', 'string', 'max:255'],
             'name_az' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'name_ru' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:7', 'regex:/^#[0-9A-F]{6}$/i'],
             'is_active' => ['required', 'boolean'],
         ];
     }

@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->string('name_az');
             $table->string('name_en');
+            $table->string('name_ru');
             $table->boolean('is_active')->default(true);
             $table->float('position')->default(0);
             $table->timestamps();

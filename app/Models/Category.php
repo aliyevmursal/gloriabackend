@@ -9,6 +9,7 @@ class Category extends Model
     protected $fillable = [
         'name_az',
         'name_en',
+        'name_ru',
         'slug',
         'is_active',
         'position',
@@ -20,13 +21,14 @@ class Category extends Model
 
     protected $appends = ['name'];
 
-    protected $hidden = ['name_az', 'name_en', 'created_at', 'updated_at', 'is_active', 'position'];
+    protected $hidden = ['name_az', 'name_en', 'name_ru', 'created_at', 'updated_at', 'is_active', 'position'];
 
     public function getNameAttribute()
     {
         return [
             'az' => $this->name_az,
             'en' => $this->name_en,
+            'ru' => $this->name_ru,
         ];
     }
 

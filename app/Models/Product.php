@@ -9,8 +9,10 @@ class Product extends Model
     protected $fillable = [
         'name_az',
         'name_en',
+        'name_ru',
         'description_az',
         'description_en',
+        'description_ru',
         'cover',
         'gallery',
         'price',
@@ -29,8 +31,10 @@ class Product extends Model
     protected $hidden = [
         'name_az',
         'name_en',
+        'name_ru',
         'description_az',
         'description_en',
+        'description_ru',
         'cover',
         'gallery',
         'is_active',
@@ -42,6 +46,7 @@ class Product extends Model
         return [
             'az' => $this->name_az,
             'en' => $this->name_en,
+            'ru' => $this->name_ru,
         ];
     }
 
@@ -50,6 +55,7 @@ class Product extends Model
         return [
             'az' => $this->description_az,
             'en' => $this->description_en,
+            'ru' => $this->description_ru,
         ];
     }
 

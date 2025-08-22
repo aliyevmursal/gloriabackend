@@ -9,6 +9,7 @@ class ContactPage extends Model
     protected $fillable = [
         'description_en',
         'description_az',
+        'description_ru',
         'phone_number',
         'email',
         'address',
@@ -16,14 +17,19 @@ class ContactPage extends Model
         'instagram_link',
         'meta_title_en',
         'meta_title_az',
+        'meta_title_ru',
         'meta_description_en',
         'meta_description_az',
+        'meta_description_ru',
         'meta_keywords_en',
         'meta_keywords_az',
+        'meta_keywords_ru',
         'og_title_en',
         'og_title_az',
+        'og_title_ru',
         'og_description_en',
         'og_description_az',
+        'og_description_ru',
         'og_image',
         'is_active'
     ];
@@ -37,16 +43,22 @@ class ContactPage extends Model
     protected $hidden = [
         'description_en',
         'description_az',
+        'description_ru',
         'meta_title_en',
         'meta_title_az',
+        'meta_title_ru',
         'meta_description_en',
         'meta_description_az',
+        'meta_description_ru',
         'meta_keywords_en',
         'meta_keywords_az',
+        'meta_keywords_ru',
         'og_title_en',
         'og_title_az',
+        'og_title_ru',
         'og_description_en',
         'og_description_az',
+        'og_description_ru',
         'created_at',
         'updated_at',
     ];
@@ -56,6 +68,7 @@ class ContactPage extends Model
         return [
             'az' => $this->description_az,
             'en' => $this->description_en,
+            'ru' => $this->description_ru,
         ];
     }
 
@@ -64,6 +77,7 @@ class ContactPage extends Model
         return [
             'az' => $this->meta_title_az,
             'en' => $this->meta_title_en,
+            'ru' => $this->meta_title_ru,
         ];
     }
 
@@ -72,6 +86,7 @@ class ContactPage extends Model
         return [
             'az' => $this->meta_description_az,
             'en' => $this->meta_description_en,
+            'ru' => $this->meta_description_ru,
         ];
     }
 
@@ -80,6 +95,7 @@ class ContactPage extends Model
         return [
             'az' => $this->meta_keywords_az,
             'en' => $this->meta_keywords_en,
+            'ru' => $this->meta_keywords_ru,
         ];
     }
 
@@ -88,6 +104,7 @@ class ContactPage extends Model
         return [
             'az' => $this->og_title_az,
             'en' => $this->og_title_en,
+            'ru' => $this->og_title_ru,
         ];
     }
 
@@ -96,6 +113,7 @@ class ContactPage extends Model
         return [
             'az' => $this->og_description_az,
             'en' => $this->og_description_en,
+            'ru' => $this->og_description_ru,
         ];
     }
 }

@@ -9,6 +9,7 @@ class Discount extends Model
     protected $fillable = [
         'name_az',
         'name_en',
+        'name_ru',
         'type',
         'value',
         'start_date',
@@ -25,13 +26,14 @@ class Discount extends Model
 
     protected $appends = ['name'];
 
-    protected $hidden = ['name_az', 'name_en', 'updated_at'];
+    protected $hidden = ['name_az', 'name_en', 'name_ru', 'updated_at'];
 
     public function getNameAttribute()
     {
         return [
             'az' => $this->name_az,
             'en' => $this->name_en,
+            'ru' => $this->name_ru,
         ];
     }
 

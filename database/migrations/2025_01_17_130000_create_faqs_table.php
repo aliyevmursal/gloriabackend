@@ -14,8 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('question_az');
             $table->string('question_en');
+            $table->string('question_ru');
             $table->text('answer_az');
             $table->text('answer_en');
+            $table->text('answer_ru');
             $table->boolean('is_active')->default(true);
             $table->integer('position')->default(0);
             $table->timestamps();

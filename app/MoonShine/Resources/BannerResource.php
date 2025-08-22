@@ -52,8 +52,6 @@ class BannerResource extends ModelResource
      */
     protected function formFields(): iterable
     {
-        $isCreating = $this->getItem() === null;
-
         return [
             Grid::make([
                 Column::make([
@@ -61,25 +59,30 @@ class BannerResource extends ModelResource
                         ID::make(),
                         Tabs::make([
                             Tab::make('EN', [
-                                Text::make('Title (EN)', 'title_en'),
+                                Text::make('Title (EN)', 'title_en')->reactive(),
                                 Text::make('Slogan (EN)', 'slogan_en'),
-                                Text::make('Description (EN)', 'helper_text_en'),
+                                Text::make('Helper Text (EN)', 'helper_text_en'),
                             ]),
                             Tab::make('AZ', [
                                 Text::make('Title (AZ)', 'title_az'),
                                 Text::make('Slogan (AZ)', 'slogan_az'),
-                                Text::make('Description (AZ)', 'helper_text_az'),
+                                Text::make('Helper Text (AZ)', 'helper_text_az'),
                             ]),
-                        ])
+                            Tab::make('RU', [
+                                Text::make('Title (RU)', 'title_ru'),
+                                Text::make('Slogan (RU)', 'slogan_ru'),
+                                Text::make('Helper Text (RU)', 'helper_text_ru'),
+                            ]),
+                        ]),
                     ])
                 ])->columnSpan(8),
 
                 Column::make([
                     Box::make([
-                        Image::make('Cover', 'cover')->required($isCreating),
+                        Image::make('Cover', 'cover')->required(),
+                        Text::make('Link', 'link')->hint('Optional link for banner'),
+                        Number::make('Position', 'position')->default(0)->min(0),
                         Switcher::make('Active', 'is_active')->default(true),
-                        Number::make('Position', 'position')->default(0),
-                        Text::make('Link', 'link')
                     ])
                 ])->columnSpan(4),
             ])
@@ -93,17 +96,20 @@ class BannerResource extends ModelResource
     {
         return [
             ID::make(),
-            Text::make('Title (EN)', 'title_en')->sortable(),
-            Text::make('Title (AZ)', 'title_en')->sortable(),
             Image::make('Cover', 'cover'),
-            Switcher::make('Active', 'is_active')->sortable(),
-            Number::make('Position', 'position')->sortable(),
-            Text::make('Slogan (EN)', 'slogan_en')->sortable(),
-            Text::make('Slogan (AZ)', 'slogan_az')->sortable(),
-            Text::make('Description (EN)', 'helper_text_en')->sortable(),
-            Text::make('Description (AZ)', 'helper_text_az')->sortable(),
+            Text::make('Title (EN)', 'title_en'),
+            Text::make('Title (AZ)', 'title_az'),
+            Text::make('Title (RU)', 'title_ru'),
+            Text::make('Slogan (EN)', 'slogan_en'),
+            Text::make('Slogan (AZ)', 'slogan_az'),
+            Text::make('Slogan (RU)', 'slogan_ru'),
+            Text::make('Helper Text (EN)', 'helper_text_en'),
+            Text::make('Helper Text (AZ)', 'helper_text_az'),
+            Text::make('Helper Text (RU)', 'helper_text_ru'),
             Text::make('Link', 'link'),
-            Date::make('Created at', 'created_at')->format("d.m.Y")->sortable(),
+            Number::make('Position', 'position'),
+            Switcher::make('Active', 'is_active'),
+            Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];
     }
 
@@ -124,19 +130,20 @@ class BannerResource extends ModelResource
      */
     protected function rules(mixed $item): array
     {
-        $isCreating = $item->getKey() === null;
-
         return [
-            'title_en' => ['required', 'string', 'max:255'],
-            'title_az' => ['required', 'string', 'max:255'],
-            'position' => ['required', 'numeric', 'min:0'],
-            'is_active' => ['required', 'boolean'],
-            'slogan_az' => ['nullable', 'string', 'max:255'],
+            'title_en' => ['nullable', 'string', 'max:255'],
+            'title_az' => ['nullable', 'string', 'max:255'],
+            'title_ru' => ['nullable', 'string', 'max:255'],
             'slogan_en' => ['nullable', 'string', 'max:255'],
-            'helper_text_az' => ['nullable', 'string', 'max:255'],
+            'slogan_az' => ['nullable', 'string', 'max:255'],
+            'slogan_ru' => ['nullable', 'string', 'max:255'],
             'helper_text_en' => ['nullable', 'string', 'max:255'],
-            'link' => ['required', 'string', 'max:255'],
-            'cover' => $isCreating ? ['required', 'image', 'max:8192'] : ['nullable', 'image', 'max:8192'],
+            'helper_text_az' => ['nullable', 'string', 'max:255'],
+            'helper_text_ru' => ['nullable', 'string', 'max:255'],
+            'cover' => ['nullable', 'image', 'max:2048'],
+            'link' => ['nullable', 'url', 'max:255'],
+            'position' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['boolean'],
         ];
     }
 }

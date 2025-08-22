@@ -16,10 +16,13 @@ return new class extends Migration {
             $table->boolean('is_active')->default(true);
             $table->string('title_az');
             $table->string('title_en');
+            $table->string('title_ru');
             $table->string('slogan_az');
             $table->string('slogan_en');
+            $table->string('slogan_ru');
             $table->string('helper_text_az')->nullable();
             $table->string('helper_text_en')->nullable();
+            $table->string('helper_text_ru')->nullable();
             $table->string('link')->nullable();
             $table->integer('position')->default(0);
             $table->timestamps();

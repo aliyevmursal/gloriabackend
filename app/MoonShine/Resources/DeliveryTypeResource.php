@@ -64,20 +64,19 @@ class DeliveryTypeResource extends ModelResource
                         ID::make(),
                         Tabs::make([
                             Tab::make('EN', [
-                                Text::make('Title (EN)', 'title_en')->required(),
+                                Text::make('Title (EN)', 'title_en')->reactive()->required(),
                             ]),
                             Tab::make('AZ', [
                                 Text::make('Title (AZ)', 'title_az')->required(),
                             ]),
+                            Tab::make('RU', [
+                                Text::make('Title (RU)', 'title_ru')->required(),
+                            ]),
                         ]),
                         Number::make('Price ($)', 'price')->required()->min(0)->step(0.01),
-                    ])
-                ])->columnSpan(8),
-                Column::make([
-                    Box::make([
                         Switcher::make('Active', 'is_active')->default(true),
                     ])
-                ])->columnSpan(4),
+                ])->columnSpan(8),
             ])
         ];
     }
@@ -91,6 +90,7 @@ class DeliveryTypeResource extends ModelResource
             ID::make(),
             Text::make('Title (EN)', 'title_en'),
             Text::make('Title (AZ)', 'title_az'),
+            Text::make('Title (RU)', 'title_ru'),
             Number::make('Price ($)', 'price'),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
@@ -108,6 +108,7 @@ class DeliveryTypeResource extends ModelResource
         return [
             'title_en' => ['required', 'string', 'max:255'],
             'title_az' => ['required', 'string', 'max:255'],
+            'title_ru' => ['required', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'min:0'],
             'is_active' => ['required', 'boolean'],
         ];

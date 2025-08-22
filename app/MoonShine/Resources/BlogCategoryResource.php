@@ -18,6 +18,8 @@ use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Layout\Column;
 
 /**
  * @extends ModelResource<BlogCategory>
@@ -57,18 +59,25 @@ class BlogCategoryResource extends ModelResource
     protected function formFields(): iterable
     {
         return [
-            Box::make([
-                ID::make(),
-                Tabs::make([
-                    Tab::make('EN', [
-                        Text::make('Name (EN)', 'name_en')->reactive(),
-                    ]),
-                    Tab::make('AZ', [
-                        Text::make('Name (AZ)', 'name_az'),
-                    ]),
-                ]),
-                Slug::make('Url', 'slug')->required()->live()->from('name_en'),
-                Switcher::make('Active', 'is_active')->default(true),
+            Grid::make([
+                Column::make([
+                    Box::make([
+                        ID::make(),
+                        Tabs::make([
+                            Tab::make('EN', [
+                                Text::make('Name (EN)', 'name_en')->reactive()->required(),
+                            ]),
+                            Tab::make('AZ', [
+                                Text::make('Name (AZ)', 'name_az')->required(),
+                            ]),
+                            Tab::make('RU', [
+                                Text::make('Name (RU)', 'name_ru')->required(),
+                            ]),
+                        ]),
+                        Slug::make('Url', 'slug')->required()->live()->from('name_en'),
+                        Switcher::make('Active', 'is_active')->default(true),
+                    ])
+                ])->columnSpan(8),
             ])
         ];
     }
@@ -82,8 +91,10 @@ class BlogCategoryResource extends ModelResource
             ID::make(),
             Text::make('Name (EN)', 'name_en'),
             Text::make('Name (AZ)', 'name_az'),
+            Text::make('Name (RU)', 'name_ru'),
             Text::make('Url', 'slug', formatted: static fn(Model $model) => "/{$model->slug}"),
-            Date::make('Created at', 'created_at')->format("d.m.Y")->sortable(),
+            Switcher::make('Active', 'is_active'),
+            Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];
     }
 
@@ -98,7 +109,9 @@ class BlogCategoryResource extends ModelResource
         return [
             'name_en' => ['required', 'string', 'max:255'],
             'name_az' => ['required', 'string', 'max:255'],
+            'name_ru' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:blog_categories,slug,' . $item->getKey()],
+            'is_active' => ['required', 'boolean'],
         ];
     }
 

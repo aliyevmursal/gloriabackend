@@ -14,8 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('name_az');
             $table->string('name_en');
+            $table->string('name_ru');
             $table->text('description_az');
             $table->text('description_en');
+            $table->text('description_ru');
             $table->string('cover');
             $table->json('gallery')->nullable();
             $table->decimal('price', 10, 2);

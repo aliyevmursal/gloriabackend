@@ -14,8 +14,10 @@ return new class extends Migration {
             $table->string('cover')->nullable()->change();
             $table->string('title_az')->nullable()->change();
             $table->string('title_en')->nullable()->change();
+            $table->string('title_ru')->nullable()->change();
             $table->string('slogan_az')->nullable()->change();
             $table->string('slogan_en')->nullable()->change();
+            $table->string('slogan_ru')->nullable()->change();
         });
     }
 
@@ -28,8 +30,10 @@ return new class extends Migration {
             $table->string('cover')->nullable(false)->change();
             $table->string('title_az')->nullable(false)->change();
             $table->string('title_en')->nullable(false)->change();
+            $table->string('title_ru')->nullable(false)->change();
             $table->string('slogan_az')->nullable(false)->change();
             $table->string('slogan_en')->nullable(false)->change();
+            $table->string('slogan_ru')->nullable(false)->change();
         });
     }
 };

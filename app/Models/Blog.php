@@ -10,18 +10,25 @@ class Blog extends Model
         'blog_category_id',
         'name_az',
         'name_en',
+        'name_ru',
         'description_az',
         'description_en',
+        'description_ru',
         'meta_title_en',
         'meta_title_az',
+        'meta_title_ru',
         'meta_description_en',
         'meta_description_az',
+        'meta_description_ru',
         'meta_keywords_en',
         'meta_keywords_az',
+        'meta_keywords_ru',
         'og_title_en',
         'og_title_az',
+        'og_title_ru',
         'og_description_en',
         'og_description_az',
+        'og_description_ru',
         'og_image',
         'cover',
         'slug',
@@ -34,13 +41,13 @@ class Blog extends Model
     ];
 
     protected $hidden = [
-        'blog_category_id', 'name_az', 'name_en', 'updated_at', 
-        'description_az', 'description_en', 'is_active', 'cover',
-        'meta_title_en', 'meta_title_az',
-        'meta_description_en', 'meta_description_az',
-        'meta_keywords_en', 'meta_keywords_az',
-        'og_title_en', 'og_title_az',
-        'og_description_en', 'og_description_az',
+        'blog_category_id', 'name_az', 'name_en', 'name_ru', 'updated_at', 
+        'description_az', 'description_en', 'description_ru', 'is_active', 'cover',
+        'meta_title_en', 'meta_title_az', 'meta_title_ru',
+        'meta_description_en', 'meta_description_az', 'meta_description_ru',
+        'meta_keywords_en', 'meta_keywords_az', 'meta_keywords_ru',
+        'og_title_en', 'og_title_az', 'og_title_ru',
+        'og_description_en', 'og_description_az', 'og_description_ru',
         'og_image'
     ];
 
@@ -51,6 +58,7 @@ class Blog extends Model
         return [
             'az' => $this->name_az,
             'en' => $this->name_en,
+            'ru' => $this->name_ru,
         ];
     }
 
@@ -59,6 +67,7 @@ class Blog extends Model
         return [
             'az' => $this->description_az,
             'en' => $this->description_en,
+            'ru' => $this->description_ru,
         ];
     }
 
@@ -72,6 +81,7 @@ class Blog extends Model
         return [
             'az' => $this->meta_title_az,
             'en' => $this->meta_title_en,
+            'ru' => $this->meta_title_ru,
         ];
     }
 
@@ -80,6 +90,7 @@ class Blog extends Model
         return [
             'az' => $this->meta_description_az,
             'en' => $this->meta_description_en,
+            'ru' => $this->meta_description_ru,
         ];
     }
 
@@ -88,6 +99,7 @@ class Blog extends Model
         return [
             'az' => $this->meta_keywords_az,
             'en' => $this->meta_keywords_en,
+            'ru' => $this->meta_keywords_ru,
         ];
     }
 
@@ -96,6 +108,7 @@ class Blog extends Model
         return [
             'az' => $this->og_title_az,
             'en' => $this->og_title_en,
+            'ru' => $this->og_title_ru,
         ];
     }
 
@@ -104,6 +117,7 @@ class Blog extends Model
         return [
             'az' => $this->og_description_az,
             'en' => $this->og_description_en,
+            'ru' => $this->og_description_ru,
         ];
     }
 

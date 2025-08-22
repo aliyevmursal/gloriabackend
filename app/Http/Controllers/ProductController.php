@@ -235,4 +235,27 @@ class ProductController extends Controller
             'data' => $similarProducts
         ]);
     }
+
+    public function scopeSearch($query, $search, $locale = 'en')
+    {
+        if (empty($search)) {
+            return $query;
+        }
+
+        $nameColumn = "name_{$locale}";
+        $descriptionColumn = "description_{$locale}";
+
+        // Validate locale to prevent SQL injection
+        $validLocales = ['en', 'az', 'ru'];
+        if (!in_array($locale, $validLocales)) {
+            $locale = 'en';
+            $nameColumn = "name_en";
+            $descriptionColumn = "description_en";
+        }
+
+        return $query->where(function ($q) use ($search, $nameColumn, $descriptionColumn) {
+            $q->where($nameColumn, 'like', "%{$search}%")
+                ->orWhere($descriptionColumn, 'like', "%{$search}%");
+        });
+    }
 }

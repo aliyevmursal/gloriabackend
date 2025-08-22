@@ -60,18 +60,13 @@ class ContactResource extends ModelResource
                 Column::make([
                     Box::make([
                         ID::make(),
-                        Text::make('Name', 'name')->readonly(),
-                        Email::make('Email', 'email')->readonly(),
-                        Text::make('Subject', 'subject')->readonly(),
-                        Textarea::make('Message', 'message')->readonly(),
+                        Text::make('Name', 'name')->required(),
+                        Email::make('Email', 'email')->required(),
+                        Text::make('Subject', 'subject')->required(),
+                        Textarea::make('Message', 'message')->required(),
+                        Switcher::make('Is Read', 'is_read')->default(false),
                     ])
                 ])->columnSpan(8),
-                Column::make([
-                    Box::make([
-                        Switcher::make('Mark as Read', 'is_read'),
-                        Date::make('Created at', 'created_at')->format("d.m.Y H:i")->readonly(),
-                    ])
-                ])->columnSpan(4),
             ])
         ];
     }
@@ -87,7 +82,7 @@ class ContactResource extends ModelResource
             Email::make('Email', 'email'),
             Text::make('Subject', 'subject'),
             Textarea::make('Message', 'message'),
-            Switcher::make('Read', 'is_read'),
+            Switcher::make('Is Read', 'is_read'),
             Date::make('Created at', 'created_at')->format("d.m.Y H:i"),
         ];
     }
@@ -101,6 +96,10 @@ class ContactResource extends ModelResource
     protected function rules(mixed $item): array
     {
         return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string'],
             'is_read' => ['boolean'],
         ];
     }
