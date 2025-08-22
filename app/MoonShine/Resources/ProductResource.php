@@ -49,7 +49,19 @@ class ProductResource extends ModelResource
             ID::make()->sortable(),
             Image::make('Cover', 'cover'),
             Text::make('Name', 'name_en')->sortable(),
-            Number::make('Price ($)', 'price')->sortable(),
+            Text::make('Price Range', formatted: function ($item) {
+                $sizes = $item->sizes()->withPivot(['price', 'is_active'])->get();
+                if ($sizes->isEmpty()) {
+                    return 'No sizes';
+                }
+                $prices = $sizes->pluck('pivot.price')->filter();
+                if ($prices->isEmpty()) {
+                    return 'No prices';
+                }
+                $min = $prices->min();
+                $max = $prices->max();
+                return $min == $max ? "$" . number_format($min, 2) : "$" . number_format($min, 2) . " - $" . number_format($max, 2);
+            })->sortable(),
             Switcher::make('Active', 'is_active')->sortable(),
             Date::make('Created at', 'created_at')->format("d.m.Y")->sortable(),
         ];
@@ -89,7 +101,6 @@ class ProductResource extends ModelResource
                         Slug::make('Url', 'slug')->required()->live()->from('name_en'),
                         Image::make('Cover', 'cover')->required($isCreating),
                         Image::make('Gallery', 'gallery')->multiple(),
-                        Number::make('Price ($)', 'price')->required()->min(0)->step(0.01),
                         Switcher::make('Active', 'is_active')->default(true),
                     ])
                 ])->columnSpan(4),
@@ -114,7 +125,11 @@ class ProductResource extends ModelResource
                 Column::make([
                     Box::make([
                         BelongsToMany::make('Sizes', 'sizes', resource: SizeResource::class)
-                            ->searchable(),
+                            ->searchable()
+                            ->fields([
+                                Number::make('Price ($)', 'price')->required()->min(0)->step(0.01),
+                                Switcher::make('Active', 'is_active')->default(true),
+                            ]),
                     ])
                 ])->columnSpan(4),
             ])
@@ -137,10 +152,26 @@ class ProductResource extends ModelResource
             Text::make('Url', 'slug', formatted: static fn(Model $model) => "/{$model->slug}"),
             Image::make('Cover', 'cover'),
             Image::make('Gallery', 'gallery')->multiple(),
-            Number::make('Price ($)', 'price'),
+            Text::make('Price Range', formatted: function ($item) {
+                $sizes = $item->sizes()->withPivot(['price', 'is_active'])->get();
+                if ($sizes->isEmpty()) {
+                    return 'No sizes';
+                }
+                $prices = $sizes->pluck('pivot.price')->filter();
+                if ($prices->isEmpty()) {
+                    return 'No prices';
+                }
+                $min = $prices->min();
+                $max = $prices->max();
+                return $min == $max ? "$" . number_format($min, 2) : "$" . number_format($min, 2) . " - $" . number_format($max, 2);
+            }),
             BelongsToMany::make('Categories', 'categories', resource: CategoryResource::class),
             BelongsToMany::make('Colors', 'colors', resource: ColorResource::class),
-            BelongsToMany::make('Sizes', 'sizes', resource: SizeResource::class),
+            BelongsToMany::make('Sizes with Prices', 'sizes', resource: SizeResource::class)
+                ->fields([
+                    Number::make('Price ($)', 'price'),
+                    Switcher::make('Active', 'is_active'),
+                ]),
             Switcher::make('Active', 'is_active'),
             Date::make('Created at', 'created_at')->format("d.m.Y"),
         ];
@@ -164,7 +195,6 @@ class ProductResource extends ModelResource
             'description_az' => ['required', 'string'],
             'description_ru' => ['required', 'string'],
             'slug' => ['required', 'string', 'max:255', 'unique:products,slug,' . $item->getKey()],
-            'price' => ['required', 'numeric', 'min:0'],
             'cover' => $isCreating ? ['required', 'image', 'max:8192'] : ['nullable', 'image', 'max:8192'],
             'gallery.*' => ['nullable', 'image', 'max:8192'],
             'is_active' => ['required', 'boolean'],

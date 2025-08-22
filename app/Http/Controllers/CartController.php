@@ -30,7 +30,7 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
-            'size_id' => ['nullable', 'exists:sizes,id'],
+            'size_id' => ['required', 'exists:sizes,id'],
             'color_id' => ['nullable', 'exists:colors,id'],
             'quantity' => ['required', 'integer', 'min:1']
         ]);
@@ -44,10 +44,23 @@ class CartController extends Controller
             ], 400);
         }
 
+        // Check if the product has this size and if it's active
+        $productSize = $product->sizes()
+            ->where('size_id', $validated['size_id'])
+            ->withPivot(['price', 'is_active'])
+            ->first();
+
+        if (!$productSize || !$productSize->pivot->is_active) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected size is not available for this product'
+            ], 400);
+        }
+
         // Check if the same product with same size and color already exists in cart
         $cartItem = Cart::where('user_id', $request->user()->id)
             ->where('product_id', $validated['product_id'])
-            ->where('size_id', array_key_exists('size_id', $validated) ? $validated['size_id'] : null)
+            ->where('size_id', $validated['size_id'])
             ->where('color_id', array_key_exists('color_id', $validated) ? $validated['color_id'] : null)
             ->first();
 
@@ -58,7 +71,7 @@ class CartController extends Controller
             $cartItem = Cart::create([
                 'user_id' => $request->user()->id,
                 'product_id' => $validated['product_id'],
-                'size_id' => array_key_exists('size_id', $validated) ? $validated['size_id'] : null,
+                'size_id' => $validated['size_id'],
                 'color_id' => array_key_exists('color_id', $validated) ? $validated['color_id'] : null,
                 'quantity' => $validated['quantity']
             ]);

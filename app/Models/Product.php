@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ProductSize;
 
 class Product extends Model
 {
@@ -15,7 +16,6 @@ class Product extends Model
         'description_ru',
         'cover',
         'gallery',
-        'price',
         'slug',
         'is_active',
     ];
@@ -23,10 +23,9 @@ class Product extends Model
     protected $casts = [
         'gallery' => 'array',
         'is_active' => 'boolean',
-        'price' => 'decimal:2',
     ];
 
-    protected $appends = ['name', 'description', 'cover_url', 'gallery_urls', 'discounted_price', 'discount'];
+    protected $appends = ['name', 'description', 'cover_url', 'gallery_urls', 'sizes_with_prices'];
 
     protected $hidden = [
         'name_az',
@@ -75,36 +74,30 @@ class Product extends Model
         }, $this->gallery);
     }
 
-    public function getDiscountedPriceAttribute()
+    public function getSizesWithPricesAttribute()
     {
-        $discount = $this->getActiveDiscount();
+        return $this->sizes()->withPivot(['price', 'is_active'])->get()->map(function ($size) {
+            $discount = $this->getActiveDiscount();
+            $price = $size->pivot->price;
+            $discountedPrice = $price;
 
-        $discountedPrice = $this->price;
-
-        if (!$discount) {
-            return $this->price;
-        }
-
-        if ($discount) {
-            if ($discount->type === 'percentage') {
-                $discountedPrice = $this->price - ($this->price * $discount->value / 100);
-            } else {
-                $discountedPrice = max(0, $this->price - $discount->value);
+            if ($discount) {
+                if ($discount->type === 'percentage') {
+                    $discountedPrice = $price - ($price * $discount->value / 100);
+                } else {
+                    $discountedPrice = max(0, $price - $discount->value);
+                }
             }
-        }
 
-        return number_format($discountedPrice, 2);
-    }
-
-    public function getDiscountAttribute()
-    {
-        $discount = $this->getActiveDiscount();
-
-        if (!$discount) {
-            return null;
-        }
-
-        return $discount;
+            return [
+                'id' => $size->id,
+                'name' => $size->name,
+                'price' => number_format($price, 2),
+                'discounted_price' => number_format($discountedPrice, 2),
+                'discount' => $discount,
+                'is_active' => $size->pivot->is_active,
+            ];
+        })->where('is_active', true);
     }
 
     public function categories()
@@ -119,7 +112,10 @@ class Product extends Model
 
     public function sizes()
     {
-        return $this->belongsToMany(Size::class, 'product_sizes');
+        return $this->belongsToMany(Size::class, 'product_sizes')
+            ->using(ProductSize::class)
+            ->withPivot(['price', 'is_active'])
+            ->withTimestamps();
     }
 
     public function getActiveDiscount()
@@ -165,12 +161,15 @@ class Product extends Model
 
     public function scopeByPriceRange($query, $minPrice = null, $maxPrice = null)
     {
-        if ($minPrice !== null) {
-            $query->where('price', '>=', $minPrice);
-        }
-
-        if ($maxPrice !== null) {
-            $query->where('price', '<=', $maxPrice);
+        if ($minPrice !== null || $maxPrice !== null) {
+            $query->whereHas('sizes', function ($q) use ($minPrice, $maxPrice) {
+                if ($minPrice !== null) {
+                    $q->where('product_sizes.price', '>=', $minPrice);
+                }
+                if ($maxPrice !== null) {
+                    $q->where('product_sizes.price', '<=', $maxPrice);
+                }
+            });
         }
 
         return $query;
@@ -184,6 +183,14 @@ class Product extends Model
 
         $nameColumn = "name_{$locale}";
         $descriptionColumn = "description_{$locale}";
+
+        // Validate locale to prevent SQL injection
+        $validLocales = ['en', 'az', 'ru'];
+        if (!in_array($locale, $validLocales)) {
+            $locale = 'en';
+            $nameColumn = "name_en";
+            $descriptionColumn = "description_en";
+        }
 
         return $query->where(function ($q) use ($search, $nameColumn, $descriptionColumn) {
             $q->where($nameColumn, 'like', "%{$search}%")

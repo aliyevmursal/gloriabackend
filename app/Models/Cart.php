@@ -14,7 +14,7 @@ class Cart extends Model
         'quantity'
     ];
 
-    protected $appends = ['total_price'];
+    protected $appends = ['total_price', 'price', 'discounted_price'];
 
     public function user()
     {
@@ -38,6 +38,77 @@ class Cart extends Model
 
     public function getTotalPriceAttribute()
     {
-        return $this->quantity * $this->product->discounted_price;
+        if (!$this->size_id) {
+            return 0;
+        }
+
+        $productSize = $this->product->sizes()
+            ->where('size_id', $this->size_id)
+            ->withPivot(['price', 'is_active'])
+            ->first();
+
+        if (!$productSize || !$productSize->pivot->is_active) {
+            return 0;
+        }
+
+        $price = $productSize->pivot->price;
+        $discount = $this->product->getActiveDiscount();
+
+        if ($discount) {
+            if ($discount->type === 'percentage') {
+                $price = $price - ($price * $discount->value / 100);
+            } else {
+                $price = max(0, $price - $discount->value);
+            }
+        }
+
+        return $this->quantity * $price;
+    }
+
+    public function getPriceAttribute()
+    {
+        if (!$this->size_id) {
+            return 0;
+        }
+
+        $productSize = $this->product->sizes()
+            ->where('size_id', $this->size_id)
+            ->withPivot(['price', 'is_active'])
+            ->first();
+
+        if (!$productSize || !$productSize->pivot->is_active) {
+            return 0;
+        }
+
+        return $productSize->pivot->price;
+    }
+
+    public function getDiscountedPriceAttribute()
+    {
+        if (!$this->size_id) {
+            return 0;
+        }
+
+        $productSize = $this->product->sizes()
+            ->where('size_id', $this->size_id)
+            ->withPivot(['price', 'is_active'])
+            ->first();
+
+        if (!$productSize || !$productSize->pivot->is_active) {
+            return 0;
+        }
+
+        $price = $productSize->pivot->price;
+        $discount = $this->product->getActiveDiscount();
+
+        if ($discount) {
+            if ($discount->type === 'percentage') {
+                $price = $price - ($price * $discount->value / 100);
+            } else {
+                $price = max(0, $price - $discount->value);
+            }
+        }
+
+        return $price;
     }
 }
